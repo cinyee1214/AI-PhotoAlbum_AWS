@@ -138,13 +138,14 @@ function uploadImage(event){
     'key': fileName,
     'Content-Type': filetype,
     'bucket': 'b2-photo-bucket',
-    'custom-Labels': label
+    'x-amz-meta-customLabels': label
   };
   console.log("Params are ",params);
 
   var additionalParams = {
       headers: {
-          'Content-Type': filetype
+          'Content-Type': filetype,
+          'x-amz-meta-customLabels': label
       }
   }
   

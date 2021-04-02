@@ -25,12 +25,27 @@ def lambda_handler(event, context):
     headers = { "Content-Type": "application/json" }
     rek = boto3.client('rekognition')
     
+    s3 = boto3.client('s3')
+    
     # get the image information from S3
     for record in event['Records']:
         bucket = record['s3']['bucket']['name']
         key = record['s3']['object']['key']
         size = record['s3']['object']['size'] # up to 5MB
         
+        s3response = s3.head_object(
+                                        Bucket=bucket,
+                                        Key=key,
+                                        )
+        
+        print("s3response --- {}".format(s3response))
+        # print("Metadata label --- {}".format(s3response['Metadata']['custom-labels']))
+        
+        labelStr = s3response['Metadata']['custom-labels']
+        print("Metadata label --- {}".format(labelStr))
+        A = labelStr.split(",")
+        
+        print(A)
         # detect the labels of current image
         labels = rek.detect_labels(
             Image={
@@ -53,6 +68,9 @@ def lambda_handler(event, context):
             
         for label in labels['Labels']:
             obj["labels"].append(label['Name'])
+            
+        for label in A:
+            obj["labels"].append(label)
         
         print("JSON OBJECT --- {}".format(obj))
         
