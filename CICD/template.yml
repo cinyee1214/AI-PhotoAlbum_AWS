@@ -1,0 +1,11 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  LF1:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: LF1_V2.lambda_handler
+      Role: arn:aws:iam::690128978051:role/service-role/LF1-role-go4oal0b
+      Runtime: python3.8
+      FunctionName: LF1_v2
+      CodeUri: 
